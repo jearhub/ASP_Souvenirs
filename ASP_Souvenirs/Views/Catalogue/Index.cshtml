@@ -1,0 +1,148 @@
+﻿@model IEnumerable<ASP_Souvenirs.Models.Souvenir>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*<h2>Index</h2>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PathOfFile)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Supplier)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PathOfFile)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplier.EmailAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.SouvenirID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.SouvenirID">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.SouvenirID">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@
+
+<h2>Souvenirs</h2>
+<div class="col-md-offset-3 col-md-9" style="text-align:right">
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                <input type="text" style="width:200px;" name="SearchString" placeholder="Find by name" value="@ViewData["currentFilter"]" />
+                <input type="submit" value="Search" class="btn btn-default" /> |
+                <a class="btn btn-default" asp-action="Index" asp-route-id="">Back to Full List</a>
+            </p>
+        </div>
+    </form>
+</div>
+<div class="col-md-3">
+    <div class="list-group" id="categories">
+        <a class="list-group-item" asp-action="Index" asp-route-id="">All Categories</a>
+        @*@{
+            List<ASP_Souvenirs.Models.Category> categories = ViewBag.Categories;
+            foreach (var category in categories)
+            {
+                <a class="list-group-item" asp-action="Index" asp-route-id="@category.CategoryID">@category.Name</a>
+            }
+        }*@
+    </div>
+</div>
+
+<div class="col-md-9">
+    @foreach (var item in Model)
+    {
+        //var imgUrl = @Href("~" + item.PathOfFile);
+        //var errImg = @Href("~/Images/bag1.jpg");
+
+        <div class="col-md-2 col-m put_center">
+            <!-- Item -->
+            <div style="width: 154px; height:180px; display:table; background:#efefef; margin: 0 auto;">
+                <div style="display:table-cell; vertical-align: middle; ">
+                    <a asp-action="Details" asp-route-id="@item.SouvenirID" class="offer-img">
+                        <img class="img-responsive" style="max-width: 154px; max-height:180px;" src="@Url.Content("~/images/items/" + @item.PathOfFile)" alt="Bag Image">
+                    </a>
+                </div>
+            </div>
+            <div class="mid-1">
+                <div>
+                    <h5><a asp-action="Details" asp-route-id="@item.SouvenirID">@Html.DisplayFor(modelItem => item.Name)</a></h5>
+                    <h6>Category: @Html.DisplayFor(modelItem => item.Category.Name)</h6>
+                    <h4>@Html.DisplayFor(modelItem => item.Price)</h4>
+                </div>
+                <div>
+                    <a class="btn-primary btn raised" asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.SouvenirID">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+
+@*@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<br />
+<br />
+
+<div class="col-md-8 col-lg-offset-3" style="text-align:left">
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled btn">
+        <span class="glyphicon glyphicon-step-backward"></span>Previous
+    </a>
+</div>
+<div class="col-md-1" style="text-align:right">
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled btn">
+        Next<span class="glyphicon glyphicon-step-forward"></span>
+    </a>
+</div>
+
+<div class="clearfix"></div>*@
