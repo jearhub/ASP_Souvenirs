@@ -21,7 +21,7 @@ namespace ASP_Souvenirs.Data
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
 
-        //public DbSet<ShoppingCart> ShoppingCart { get; set; }
+        public DbSet<ShoppingCart> ShoppingCart { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Souvenir> Sourvenirs { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
@@ -43,7 +43,7 @@ namespace ASP_Souvenirs.Data
             builder.Entity<Supplier>().ToTable("Supplier");
             builder.Entity<CartItem>().ToTable("CartItem");
 
-            //builder.Entity<OrderItem>().HasOne(oi => oi.Order).WithMany(o => o.OrderItems).OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+            builder.Entity<OrderItem>().HasOne(oi => oi.Order).WithMany(o => o.OrderItems).OnDelete(DeleteBehavior.Cascade);
         }
 
         //public DbSet<ASP_Souvenirs.Models.ApplicationUser> ApplicationUser { get; set; }

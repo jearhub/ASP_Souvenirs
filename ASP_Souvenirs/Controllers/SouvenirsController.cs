@@ -114,12 +114,14 @@ namespace ASP_Souvenirs.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SouvenirID,Name,Description,Price,CategoryID,SupplierID")] Souvenir souvenir, IFormFile uploadFile)
+        public async Task<IActionResult> Edit(int id, [Bind("SouvenirID,Name,Description,Price,PathOfFile,CategoryID,SupplierID")] Souvenir souvenir, IFormFile uploadFile)
         {
             if (id != souvenir.SouvenirID)
             {
                 return NotFound();
             }
+
+            var file = "";
 
             if (ModelState.IsValid)
             {
@@ -135,6 +137,11 @@ namespace ASP_Souvenirs.Controllers
                         }
                         souvenir.PathOfFile = fileName;
                     }
+                    else
+                    {
+                        file = souvenir.PathOfFile;
+                    }
+                    souvenir.PathOfFile = file;
 
                     _context.Update(souvenir);
                     await _context.SaveChangesAsync();
@@ -182,10 +189,18 @@ namespace ASP_Souvenirs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var souvenir = await _context.Sourvenirs.FindAsync(id);
+            var souvenir = await _context.Sourvenirs.SingleOrDefaultAsync(m => m.SouvenirID == id);
             _context.Sourvenirs.Remove(souvenir);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                TempData["BagUsed"] = "This item is used in previous orders. Delete item from orders and try again.";
+                return RedirectToAction("Delete");
+            }
+            return RedirectToAction("Index");
         }
 
         private bool SouvenirExists(int id)

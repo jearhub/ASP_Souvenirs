@@ -141,10 +141,20 @@ namespace ASP_Souvenirs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var category = await _context.Categories.SingleOrDefaultAsync(m => m.CategoryID == id);
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            catch (DbUpdateException)
+            {
+                TempData["CategoryUsed"] = "There is at least one item in the category. Delete items from category and try again.";
+                return RedirectToAction("Delete");
+            }
+
         }
 
         private bool CategoryExists(int id)

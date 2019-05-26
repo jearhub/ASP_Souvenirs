@@ -20,10 +20,28 @@ namespace ASP_Souvenirs.Controllers
         }
 
         // GET: Catalogue
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString, int? id)
         {
-            var applicationDbContext = _context.Sourvenirs.Include(s => s.Category).Include(s => s.Supplier);
-            return View(await applicationDbContext.ToListAsync());
+            ViewBag.Categories = _context.Categories.ToList();
+
+            if (id != null)
+            {
+                var souvenirs = _context.Sourvenirs.Where(s => s.CategoryID == id).ToList();
+                return View(souvenirs);
+            }
+
+            else if (!String.IsNullOrEmpty(SearchString))
+            {
+                var applicationDbContext = _context.Sourvenirs.Include(s => s.Category).Include(s => s.Supplier).Where(s => s.Name.Contains(SearchString));
+
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.Sourvenirs.Include(s => s.Category).Include(s => s.Supplier);
+
+                return View(await applicationDbContext.ToListAsync());
+            }
         }
 
         // GET: Catalogue/Details/5
